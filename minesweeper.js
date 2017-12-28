@@ -11,13 +11,21 @@ board.cells = [ {row: 0, col: 0, isMine: false, hidden: true},
   {row: 2, col: 0, isMine: true, hidden: true},
   {row: 2, col: 1, isMine: false, hidden: true},
   {row: 2, col: 2, isMine: false, hidden: true}];
-{}
-
 
 function startGame () {
-  for (var i = 0; i <board.cells.length; i++) {
-    board.cells[i].susurroundingMines = countSurroundingMines(board.cells[i]);
+  for (var i = 0; i < board.cells.length; i++) {
+    board.cells[i].surroundingMines = countSurroundingMines(board.cells[i]);
   }
+  document.addEventListener('mouseup', function(e){
+    if (e.which === 1) {
+      //1 is equal to left click
+      checkForWin()
+    } else if (e.which === 3) {
+      //2 is equal to right click
+      checkForWin()
+    }
+  })
+  
   // Don't remove this function call: it makes the game work!
   lib.initBoard()
 }
@@ -27,11 +35,34 @@ function startGame () {
 // 1. Are all of the cells that are NOT mines visible?
 // 2. Are all of the mines marked?
 function checkForWin () {
+var markedMinesCount = 0
+var isMineTotal = 0
+  for (var i = 0; i < board.cells.length; i++) {
+    if (board.cells[i].isMine === true) {
+      isMineTotal++
+      console.log('total' + isMineTotal);
+    }
+    if ((board.cells[i].isMine === true) && (board.cells[i].isMarked === true)) {
+    markedMinesCount++
+    console.log('count' + markedMinesCount);
+    //if isMine === true AND isMarked === true then game is won
+  } 
+  }
+  console.log("Total mines = " + isMineTotal)
+  console.log("Total marked mines = " + markedMinesCount)
+  if (markedMinesCount === isMineTotal) {
+    lib.displayMessage('You win!')
+    console.log('you win');
+  //markedMinesCount === totalMines that are true
+} 
+  
+}
+
+
 
   // You can use this function call to declare a winner (once you've
   // detected that they've won, that is!)
   //   lib.displayMessage('You win!')
-}
 
 // Define this function to count the number of mines around the cell
 // (there could be as many as 8). You don't have to get the surrounding
